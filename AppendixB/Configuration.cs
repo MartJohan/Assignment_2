@@ -10,7 +10,7 @@ namespace dotnetcore.DAL
     {
         
         //Add local datasource address
-        public static string DATASOURCE = "aaaa";
+        public static string DATASOURCE = "aaaaa";
 
         
         public static string INTERNAL_CATALOG = "Chinook";
