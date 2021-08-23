@@ -22,19 +22,24 @@ namespace dotnetcore.DAL
 
         }
 
-        public void Connect()
+        public void InsertQuery(string table, string[] keys, string[] values)
         {
+            string keysString = string.Join(",", keys);
+            string atKeyString = "@" + string.Join(", @", keys);
 
-            string sql = "INSERT INTO Genre(Name) VALUES (@Name)";
+
+            string sql = $"INSERT INTO {table} ({keysString}) VALUES ({atKeyString})";
             using (Connection = new SqlConnection(Builder.ConnectionString))
             {
                 Connection.Open();
-                Console.WriteLine("State: {0}", Connection.State);
 
                 using (SqlCommand command = new SqlCommand(sql, Connection))
                 {
-                    command.Parameters.AddWithValue("@Name", "Tien");
-                    Console.WriteLine("asfasf");
+                    for (int i = 0; i < keys.Length; i++)
+                    {
+                        command.Parameters.AddWithValue("@" +keys[i], values[i]);
+                    }
+                    
                     command.ExecuteNonQuery();
                 }
             }

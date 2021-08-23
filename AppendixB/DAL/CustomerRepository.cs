@@ -18,7 +18,9 @@ namespace dotnetcore.DAL
 
         public CustomerRepository()
         {
-            dbHelper.Connect();
+            string[] a = { "FirstName", "LastName", "Email" };
+            string[] b = { "Tien", "Nguyen", "tien@mail.com"};
+            dbHelper.InsertQuery("Customer", a, b);
         }
 
         public IEnumerable<Customer> CountCustomersPerCountry()
