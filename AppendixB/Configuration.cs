@@ -5,7 +5,7 @@ namespace dotnetcore
     {
 
         //Add local datasource address
-        public static string DATASOURCE = "cc";
+        public static string DATASOURCE = "dddd";
 
 
         public static string INTERNAL_CATALOG = "Chinook";
