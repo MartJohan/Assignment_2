@@ -8,5 +8,8 @@ namespace dotnetcore.Models
 {
     class CustomerCountry
     {
+        private int countryId { get; set; }
+        private string country { get; set; }
+
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dotnetcore.Models
 {
-    class CustomerGenre
+    public class CustomerGenre
     {
     }
 }

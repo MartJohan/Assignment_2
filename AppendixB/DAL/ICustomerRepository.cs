@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using dotnetcore.Models;
 
 namespace dotnetcore.DAL
 {
@@ -18,5 +19,25 @@ namespace dotnetcore.DAL
          * return number of customers in each country in descending order
          * For a customer return their most popular genre
          */
+
+        public IEnumerable<Customer> ReadAllCustomers();
+
+        public Customer GetCustomer(int id);
+
+        public Customer GetCustomer(string name);
+
+        public IEnumerable<Customer> ReadCustomersInRange(int offset, int limit);
+
+        public void AddCustomer(Customer customer);
+
+        public void UpdateCustomer(Customer customer);
+
+        public IEnumerable<Customer> CountCustomersPerCountry();
+
+        public CustomerSpender GetTopSpenders();
+
+        public CustomerSpender GetTopSpenders(int limit);
+
+        public CustomerGenre GetMostPopularGenreForCustomer(Customer customer);
     }
 }

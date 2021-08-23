@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace dotnetcore.Models
 {
-    class CustomerSpender
+    public class CustomerSpender
     {
     }
 }
