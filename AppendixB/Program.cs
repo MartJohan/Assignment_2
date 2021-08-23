@@ -1,4 +1,6 @@
-﻿using System;
+﻿using dotnetcore.DAL;
+using Microsoft.Data.SqlClient;
+using System;
 
 namespace dotnetcore
 {
@@ -6,6 +8,9 @@ namespace dotnetcore
     {
         static void Main(string[] args)
         {
+            CustomerRepository c = new CustomerRepository();
+
+
 
         }
     }

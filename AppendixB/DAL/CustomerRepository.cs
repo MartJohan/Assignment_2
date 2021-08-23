@@ -1,4 +1,5 @@
 ﻿using dotnetcore.Models;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,15 @@ namespace dotnetcore.DAL
 {
     class CustomerRepository : ICustomerRepository
     {
+        DBHelper dbHelper = new DBHelper(Configuration.DATASOURCE, Configuration.INTERNAL_CATALOG);
         public void AddCustomer(Customer customer)
         {
             throw new NotImplementedException();
+        }
+
+        public CustomerRepository()
+        {
+            dbHelper.Connect();
         }
 
         public IEnumerable<Customer> CountCustomersPerCountry()
