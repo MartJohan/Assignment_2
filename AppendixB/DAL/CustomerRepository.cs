@@ -51,6 +51,7 @@ namespace dotnetcore.DAL
                     }
                 }
             }
+            // ID, Firstname, Last, Country, PostalC, PhoneN, Email
             Connection.Close();
             return new Customer();
         }

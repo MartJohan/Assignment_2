@@ -19,19 +19,19 @@ namespace dotnetcore.Models
         * return number of customers in each country in descending order
         * For a customer return their most popular genre
         */
-        private int ID { get; set; }
+        public int ID { get; set; }
 
-        private string firstname { get; set; }
+        public string Firstname { get; set; }
 
-        private string lastname { get; set; }
+        public string Lastname { get; set; }
 
-        private CustomerCountry country { get; set; }
+        public CustomerCountry Country { get; set; }
 
-        private string postalCode { get; set; }
+        public string PostalCode { get; set; }
 
-        private string phoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
-        private string email { get; set; }
+        public string Email { get; set; }
 
 
     }

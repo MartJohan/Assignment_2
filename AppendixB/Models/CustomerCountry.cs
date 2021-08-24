@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace dotnetcore.Models
 {
-    class CustomerCountry
+    public class CustomerCountry
     {
-        private int countryId { get; set; }
-        private string country { get; set; }
+        public int CountryId { get; set; }
+        public string Country { get; set; }
 
     }
 }
