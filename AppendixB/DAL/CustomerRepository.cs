@@ -10,15 +10,24 @@ namespace dotnetcore.DAL
 {
     class CustomerRepository : ICustomerRepository
     {
-        DBHelper dbHelper = new DBHelper(Configuration.DATASOURCE, Configuration.INTERNAL_CATALOG);
-        public void AddCustomer(Customer customer)
-        {
-            throw new NotImplementedException();
-        }
+        public SqlConnectionStringBuilder Builder { get; set; }
+        public SqlConnection Connection { get; set; }
 
         public CustomerRepository()
         {
-            dbHelper.Connect();
+            Builder = new SqlConnectionStringBuilder();
+            Builder.DataSource = Configuration.DATASOURCE;
+            Builder.InitialCatalog = Configuration.INTERNAL_CATALOG;
+            Builder.IntegratedSecurity = true;
+
+            Connection = new SqlConnection(Builder.ConnectionString);
+            Connection.Open();
+        }
+
+
+        public void AddCustomer(Customer customer)
+        {
+            throw new NotImplementedException();
         }
 
         public IEnumerable<Customer> CountCustomersPerCountry()
@@ -28,7 +37,22 @@ namespace dotnetcore.DAL
 
         public Customer GetCustomer(int id)
         {
-            throw new NotImplementedException();
+            string sql = $"Select * from Customer where CustomerId = {id}";
+
+            using (SqlCommand command = new SqlCommand(sql, Connection))
+            {
+                using(SqlDataReader reader = command.ExecuteReader())
+                {
+                    Console.WriteLine($"{reader.GetName(0)}  {reader.GetName(1)}");
+
+                    while(reader.Read())
+                    {
+                        Console.WriteLine($"{reader.GetInt32(0)}  {reader.GetString(1)}");
+                    }
+                }
+            }
+            Connection.Close();
+            return new Customer();
         }
 
         public Customer GetCustomer(string name)
@@ -63,7 +87,7 @@ namespace dotnetcore.DAL
 
         public void UpdateCustomer(Customer customer)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("ølaksdaskøld");
         }
     }
 }
