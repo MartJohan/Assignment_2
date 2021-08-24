@@ -29,15 +29,34 @@ namespace dotnetcore.DAL
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Customer> CountCustomersPerCountry()
+        public IEnumerable<CustomerCountry> CountCustomersPerCountry()
         {
-            throw new NotImplementedException();
+            Connection.Open();
+            string sql = "SELECT COUNT(CustomerId) AS Amount, Country FROM Customer GROUP BY Country ORDER BY Amount DESC";
+            List<CustomerCountry> CountryOccuranceList = new List<CustomerCountry>();
+            using (SqlCommand command = new SqlCommand(sql, Connection))
+            {
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while(reader.Read())
+                    {
+                        CustomerCountry customerCountry = new()
+                        {
+                            CustomerCount = reader.GetInt32(0),
+                            Country = reader.GetString(1),
+                        };
+                        CountryOccuranceList.Add(customerCountry);
+                    }
+                }
+            }
+            Connection.Close();
+            return CountryOccuranceList;
         }
 
         public Customer GetCustomer(int id)
         {
             Connection.Open();
-            string sql = "Select CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email from Customer where CustomerId like @id";
+            string sql = "SELECT CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email FROM Customer WHERE CustomerId LIKE @id";
             Customer customer = new Customer();
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
@@ -48,12 +67,13 @@ namespace dotnetcore.DAL
                     reader.Read();
                     Customer tempCustomer = new()
                     {
+                        //reader.IsDBNull(x) ? null : reader.GetString(x)
                         ID = reader.GetInt32(0),
                         Firstname = reader.GetString(1),
                         Lastname = reader.GetString(2),
-                        Country = reader.GetString(3),
-                        PostalCode = reader.GetString(4),
-                        PhoneNumber = reader.GetString(5),
+                        Country = reader.IsDBNull(3) ? null : reader.GetString(3),
+                        PostalCode = reader.IsDBNull(3) ? null : reader.GetString(4),
+                        PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(5),
                         Email = reader.GetString(6),
                     };
                     customer = tempCustomer;
@@ -66,7 +86,7 @@ namespace dotnetcore.DAL
         public Customer GetCustomer(string firstname, string lastname)
         {
             Connection.Open();
-            string sql = "Select CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email from Customer where FirstName like @firstname and LastName like @lastname ";
+            string sql = "SELECT CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email FROM Customer WHERE FirstName LIKE @firstname AND LastName LIKE @lastname ";
             Customer customer = new Customer();
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
@@ -81,9 +101,9 @@ namespace dotnetcore.DAL
                         ID = reader.GetInt32(0),
                         Firstname = reader.GetString(1),
                         Lastname = reader.GetString(2),
-                        Country = reader.GetString(3),
-                        PostalCode = reader.GetString(4),
-                        PhoneNumber = reader.GetString(5),
+                        Country = reader.IsDBNull(3) ? null : reader.GetString(3),
+                        PostalCode = reader.IsDBNull(3) ? null : reader.GetString(4),
+                        PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(5),
                         Email = reader.GetString(6),
                     };
                     customer = tempCustomer;

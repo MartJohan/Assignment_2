@@ -2,6 +2,7 @@
 using dotnetcore.Models;
 using Microsoft.Data.SqlClient;
 using System;
+using System.Collections.Generic;
 
 namespace dotnetcore
 {
@@ -12,8 +13,17 @@ namespace dotnetcore
         {
             CustomerRepository customerRepository = new CustomerRepository();
             Customer customer = customerRepository.GetCustomer(2);
-            Console.WriteLine($"{customer.ID}  {customer.Firstname}  {customer.Lastname}  {customer.Country}" +
-                $"{customer.Email}  {customer.PostalCode}  {customer.PhoneNumber}");
+
+            List<CustomerCountry> list = (List<CustomerCountry>)customerRepository.CountCustomersPerCountry();
+
+
+            foreach(var item in list)
+            {
+                Console.WriteLine($"{item.Country} has {item.CustomerCount}");
+            }
+
+           // Console.WriteLine($"{customer.ID}  {customer.Firstname}  {customer.Lastname}  {customer.Country}" +
+             //   $"{customer.Email}  {customer.PostalCode}  {customer.PhoneNumber}");
 
         }
     }
