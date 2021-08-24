@@ -30,7 +30,7 @@ namespace dotnetcore.DAL
 
         public void AddCustomer(Customer customer);
 
-        public void UpdateCustomer(Customer customer);
+        public void UpdateCustomer(Customer customer, CustomerKeys[] keys, string[] values);
 
         public IEnumerable<Customer> CountCustomersPerCountry();
 
