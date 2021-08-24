@@ -45,9 +45,7 @@ namespace dotnetcore.DAL
                 using(SqlDataReader reader = command.ExecuteReader())
                 {
                     reader.Read();
-                    Console.WriteLine($" ID: {reader.GetInt32(0)} /t Name {reader.GetString(1)}");
-                    CustomerCountry country = new CustomerCountry();
-                    Customer tempCustomer = new Customer
+                    Customer tempCustomer = new()
                     {
                         ID = reader.GetInt32(0),
                         Firstname = reader.GetString(1),
@@ -57,11 +55,11 @@ namespace dotnetcore.DAL
                         PhoneNumber = reader.GetString(5),
                         Email = reader.GetString(6),
                     };
+                    customer = tempCustomer;
                 }
             }
-            // ID, Firstname, Last, Country, PostalC, PhoneN, Email
             Connection.Close();
-            return new Customer();
+            return customer;
         }
 
         public Customer GetCustomer(string name)

@@ -10,8 +10,11 @@ namespace dotnetcore
 
         static void Main(string[] args)
         {
-        CustomerRepository customerRepository = new CustomerRepository();
-            customerRepository.GetCustomer(2);
+            CustomerRepository customerRepository = new CustomerRepository();
+            Customer customer = customerRepository.GetCustomer(2);
+            Console.WriteLine($"{customer.ID}  {customer.Firstname}  {customer.Lastname}  {customer.Country}" +
+                $"{customer.Email}  {customer.PostalCode}  {customer.PhoneNumber}");
+
         }
     }
 }
