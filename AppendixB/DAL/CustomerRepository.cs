@@ -77,7 +77,22 @@ namespace dotnetcore.DAL
 
         public IEnumerable<Customer> ReadAllCustomers()
         {
-            throw new NotImplementedException();
+            Connection.Open();
+            string sql = $"Select * from Customer";
+
+            using (SqlCommand command = new SqlCommand(sql, Connection))
+            {
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    Console.WriteLine($"{reader.GetName(0)}  {reader.GetName(1)}");
+
+                    while (reader.Read())
+                    {
+                        Console.WriteLine($"{reader.GetInt32(0)}  {reader.GetString(1)}");
+                    }
+                }
+            }
+            Connection.Close();
         }
 
         public IEnumerable<Customer> ReadCustomersInRange(int offset, int limit)
