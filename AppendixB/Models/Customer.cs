@@ -25,7 +25,7 @@ namespace dotnetcore.Models
 
         public string Lastname { get; set; }
 
-        public CustomerCountry Country { get; set; }
+        public string Country { get; set; }
 
         public string PostalCode { get; set; }
 

@@ -37,18 +37,26 @@ namespace dotnetcore.DAL
         public Customer GetCustomer(int id)
         {
             Connection.Open();
-            string sql = $"Select * from Customer where CustomerId = {id}";
+            string sql = $"Select CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email from Customer where CustomerId = {id}";
+            Customer customer = new Customer();
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
                 using(SqlDataReader reader = command.ExecuteReader())
                 {
-                    Console.WriteLine($"{reader.GetName(0)}  {reader.GetName(1)}");
-
-                    while(reader.Read())
+                    reader.Read();
+                    Console.WriteLine($" ID: {reader.GetInt32(0)} /t Name {reader.GetString(1)}");
+                    CustomerCountry country = new CustomerCountry();
+                    Customer tempCustomer = new Customer
                     {
-                        Console.WriteLine($"{reader.GetInt32(0)}  {reader.GetString(1)}");
-                    }
+                        ID = reader.GetInt32(0),
+                        Firstname = reader.GetString(1),
+                        Lastname = reader.GetString(2),
+                        Country = reader.GetString(3),
+                        PostalCode = reader.GetString(4),
+                        PhoneNumber = reader.GetString(5),
+                        Email = reader.GetString(6),
+                    };
                 }
             }
             // ID, Firstname, Last, Country, PostalC, PhoneN, Email

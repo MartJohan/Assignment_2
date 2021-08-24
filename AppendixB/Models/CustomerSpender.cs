@@ -8,5 +8,9 @@ namespace dotnetcore.Models
 {
     public class CustomerSpender
     {
+        public string CustomerFirstname { get; set; }
+        public string CustomerLastname { get; set; }
+        public double TotalAmount { get; set; }
+
     }
 }
