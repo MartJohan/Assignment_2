@@ -24,7 +24,7 @@ namespace dotnetcore.DAL
 
         public Customer GetCustomer(int id);
 
-        public Customer GetCustomer(string name);
+        public Customer GetCustomer(string firstname, string lastname);
 
         public IEnumerable<Customer> ReadCustomersInRange(int offset, int limit);
 
@@ -32,7 +32,7 @@ namespace dotnetcore.DAL
 
         public void UpdateCustomer(Customer customer, CustomerKeys[] keys, string[] values);
 
-        public IEnumerable<Customer> CountCustomersPerCountry();
+        public IEnumerable<CustomerCountry> CountCustomersPerCountry();
 
         public CustomerSpender GetTopSpenders();
 

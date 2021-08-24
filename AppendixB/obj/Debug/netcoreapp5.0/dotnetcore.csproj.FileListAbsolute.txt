@@ -100,3 +100,9 @@ C:\Users\tinguy\source\repos\Accelerate_assignment2\AppendixB\bin\Debug\netcorea
 C:\Users\tinguy\source\repos\Accelerate_assignment2\AppendixB\bin\Debug\netcoreapp5.0\runtimes\win-x86\native\sni.dll
 C:\Users\tinguy\source\repos\Accelerate_assignment2\AppendixB\bin\Debug\netcoreapp5.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\tinguy\source\repos\Accelerate_assignment2\AppendixB\bin\Debug\netcoreapp5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\martij\source\repos\assignment_2\AppendixB\bin\Debug\netcoreapp5.0\System.Data.SqlClient.dll
+C:\Users\martij\source\repos\assignment_2\AppendixB\bin\Debug\netcoreapp5.0\runtimes\win-arm64\native\sni.dll
+C:\Users\martij\source\repos\assignment_2\AppendixB\bin\Debug\netcoreapp5.0\runtimes\win-x64\native\sni.dll
+C:\Users\martij\source\repos\assignment_2\AppendixB\bin\Debug\netcoreapp5.0\runtimes\win-x86\native\sni.dll
+C:\Users\martij\source\repos\assignment_2\AppendixB\bin\Debug\netcoreapp5.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\martij\source\repos\assignment_2\AppendixB\bin\Debug\netcoreapp5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

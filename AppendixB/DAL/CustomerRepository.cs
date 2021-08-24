@@ -52,36 +52,105 @@ namespace dotnetcore.DAL
             Connection.Close();
         }
 
-        public IEnumerable<Customer> CountCustomersPerCountry()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Customer GetCustomer(int id)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Returns a list of customers per country in descending order</returns>
+        public IEnumerable<CustomerCountry> CountCustomersPerCountry()
         {
             Connection.Open();
-            string sql = "Select * from Customer where CustomerId = {id}";
-
+            string sql = "SELECT COUNT(CustomerId) AS Amount, Country FROM Customer GROUP BY Country ORDER BY Amount DESC";
+            List<CustomerCountry> CountryOccuranceList = new List<CustomerCountry>();
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
-                using(SqlDataReader reader = command.ExecuteReader())
+                using (SqlDataReader reader = command.ExecuteReader())
                 {
-                    Console.WriteLine($"{reader.GetName(0)}  {reader.GetName(1)}");
-
                     while(reader.Read())
                     {
-                        Console.WriteLine($"{reader.GetInt32(0)}  {reader.GetString(1)}");
+                        CustomerCountry customerCountry = new()
+                        {
+                            CustomerCount = reader.GetInt32(0),
+                            Country = reader.GetString(1),
+                        };
+                        CountryOccuranceList.Add(customerCountry);
                     }
                 }
             }
-            // ID, Firstname, Last, Country, PostalC, PhoneN, Email
             Connection.Close();
-            return new Customer();
+            return CountryOccuranceList;
         }
 
-        public Customer GetCustomer(string name)
+        /// <summary>
+        /// Takes in an id and finds the appropriate customer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>An object of type Customer</returns>
+        public Customer GetCustomer(int id)
         {
-            throw new NotImplementedException();
+            Connection.Open();
+
+            string sql = "SELECT CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email FROM Customer WHERE CustomerId LIKE @id";
+            Customer customer = new Customer();
+
+
+            using (SqlCommand command = new SqlCommand(sql, Connection))
+            {
+                command.Parameters.AddWithValue("@id", id);
+                using(SqlDataReader reader = command.ExecuteReader())
+                {
+                    reader.Read();
+                    Customer tempCustomer = new()
+                    {
+                        //reader.IsDBNull(x) ? null : reader.GetString(x)
+                        ID = reader.GetInt32(0),
+                        Firstname = reader.GetString(1),
+                        Lastname = reader.GetString(2),
+                        Country = reader.IsDBNull(3) ? null : reader.GetString(3),
+                        PostalCode = reader.IsDBNull(3) ? null : reader.GetString(4),
+                        PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(5),
+                        Email = reader.GetString(6),
+                    };
+                    customer = tempCustomer;
+                }
+            }
+            Connection.Close();
+            return customer;
+        }
+
+        /// <summary>
+        /// Takes in the firstname and lastname of a customer and tries to find him/her
+        /// </summary>
+        /// <param name="firstname"></param>
+        /// <param name="lastname"></param>
+        /// <returns>Returns a Customer object of specified customer</returns>
+        public Customer GetCustomer(string firstname, string lastname)
+        {
+            Connection.Open();
+            string sql = "SELECT CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email FROM Customer WHERE FirstName LIKE @firstname AND LastName LIKE @lastname ";
+            Customer customer = new Customer();
+
+            using (SqlCommand command = new SqlCommand(sql, Connection))
+            {
+                command.Parameters.AddWithValue("@firstname", "%" + firstname + "%");
+                command.Parameters.AddWithValue("@lastname", "%" + lastname + "%");
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    reader.Read();
+                    Customer tempCustomer = new()
+                    {
+                        ID = reader.GetInt32(0),
+                        Firstname = reader.GetString(1),
+                        Lastname = reader.GetString(2),
+                        Country = reader.IsDBNull(3) ? null : reader.GetString(3),
+                        PostalCode = reader.IsDBNull(3) ? null : reader.GetString(4),
+                        PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(5),
+                        Email = reader.GetString(6),
+                    };
+                    customer = tempCustomer;
+                }
+            }
+            Connection.Close();
+            return customer;
         }
 
         public CustomerGenre GetMostPopularGenreForCustomer(Customer customer)
