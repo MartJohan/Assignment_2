@@ -8,5 +8,8 @@ namespace dotnetcore.Models
 {
     public class CustomerGenre
     {
+        public string GenreName { get; set; }
+
+        public int CustomerCount { get; set; }
     }
 }
