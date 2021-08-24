@@ -26,7 +26,30 @@ namespace dotnetcore.DAL
 
         public void AddCustomer(Customer customer)
         {
-            throw new NotImplementedException();
+            Connection.Open();
+            string sql = "Insert into Customer (FirstName, LastName, Country, PostalCode, Phone, Email)" +
+                "Values (@FirstName, @LastName, @Country, @PostalCode, @Phone, @Email)";
+
+            using (SqlCommand command = new SqlCommand(sql, Connection))
+            {
+                try
+                {
+                    command.Parameters.AddWithValue("@FirstName", customer.Firstname);
+                    command.Parameters.AddWithValue("@LastName", customer.Lastname);
+                    command.Parameters.AddWithValue("@Country", customer.Country ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@PostalCode", customer.PostalCode ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Phone", customer.PhoneNumber ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@email", customer.Email);
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Customer needs first name, last name, and email!");
+                }
+
+            }
+            
+            Connection.Close();
         }
 
         public IEnumerable<Customer> CountCustomersPerCountry()
@@ -37,26 +60,18 @@ namespace dotnetcore.DAL
         public Customer GetCustomer(int id)
         {
             Connection.Open();
-            string sql = $"Select CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email from Customer where CustomerId = {id}";
-            Customer customer = new Customer();
+            string sql = "Select * from Customer where CustomerId = {id}";
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
                 using(SqlDataReader reader = command.ExecuteReader())
                 {
-                    reader.Read();
-                    Console.WriteLine($" ID: {reader.GetInt32(0)} /t Name {reader.GetString(1)}");
-                    CustomerCountry country = new CustomerCountry();
-                    Customer tempCustomer = new Customer
+                    Console.WriteLine($"{reader.GetName(0)}  {reader.GetName(1)}");
+
+                    while(reader.Read())
                     {
-                        ID = reader.GetInt32(0),
-                        Firstname = reader.GetString(1),
-                        Lastname = reader.GetString(2),
-                        Country = reader.GetString(3),
-                        PostalCode = reader.GetString(4),
-                        PhoneNumber = reader.GetString(5),
-                        Email = reader.GetString(6),
-                    };
+                        Console.WriteLine($"{reader.GetInt32(0)}  {reader.GetString(1)}");
+                    }
                 }
             }
             // ID, Firstname, Last, Country, PostalC, PhoneN, Email
@@ -86,8 +101,10 @@ namespace dotnetcore.DAL
 
         public IEnumerable<Customer> ReadAllCustomers()
         {
+            List<Customer> customerList = new List<Customer>();
+            Customer customer;
             Connection.Open();
-            string sql = $"Select * from Customer";
+            string sql = "Select * from Customer";
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
@@ -97,21 +114,95 @@ namespace dotnetcore.DAL
 
                     while (reader.Read())
                     {
-                        Console.WriteLine($"{reader.GetInt32(0)}  {reader.GetString(1)}");
+
+                        customer = new Customer {
+                            Firstname = reader.IsDBNull(1) ? null : reader.GetString(1),
+                            Lastname = reader.IsDBNull(2) ? null : reader.GetString(2),
+                            Country = reader.IsDBNull(7) ? null : reader.GetString(7),
+                            PostalCode = reader.IsDBNull(8) ? null : reader.GetString(8),
+                            PhoneNumber = reader.IsDBNull(9) ? null : reader.GetString(9),
+                            Email = reader.IsDBNull(11) ? null : reader.GetString(11)
+
+                        };
+
+                        customerList.Add(customer);
+                        
                     }
                 }
             }
             Connection.Close();
+            return customerList;
         }
 
         public IEnumerable<Customer> ReadCustomersInRange(int offset, int limit)
         {
-            throw new NotImplementedException();
+            List<Customer> customerList = new List<Customer>();
+            Customer customer;
+            Connection.Open();
+            string sql = "Select * from Customer ORDER BY CustomerId ASC OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY";
+            Console.WriteLine(sql);
+
+            using (SqlCommand command = new SqlCommand(sql, Connection))
+            {
+                command.Parameters.AddWithValue("@offset", offset);
+                command.Parameters.AddWithValue("@limit", limit);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    Console.WriteLine($"{reader.GetName(0)}  {reader.GetName(1)}");
+
+                    while (reader.Read())
+                    {
+
+                        customer = new Customer
+                        {
+                            Firstname = reader.GetString(1),
+                            Lastname = reader.GetString(2),
+                            Country = reader.IsDBNull(7) ? null : reader.GetString(7),
+                            PostalCode = reader.IsDBNull(8) ? null : reader.GetString(8),
+                            PhoneNumber = reader.IsDBNull(9) ? null : reader.GetString(9),
+                            Email = reader.GetString(11)
+
+                        };
+
+                        customerList.Add(customer);
+
+                    }
+                }
+            }
+            Connection.Close();
+            return customerList;
         }
 
-        public void UpdateCustomer(Customer customer)
+        public void UpdateCustomer(Customer customer, CustomerKeys[] keys, string[] values)
         {
-            Console.WriteLine("ølaksdaskøld");
+            if(keys.Length != values.Length)
+            {
+                throw new ArgumentException("Keys and string need to be the same size");
+            }
+            Connection.Open();
+            //TODO Finish method
+            string sql = "UPDATE Customers SET ";
+
+            using (SqlCommand command = new SqlCommand(sql, Connection))
+            {
+                try
+                {
+                    command.Parameters.AddWithValue("@FirstName", customer.Firstname);
+                    command.Parameters.AddWithValue("@LastName", customer.Lastname);
+                    command.Parameters.AddWithValue("@Country", customer.Country ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@PostalCode", customer.PostalCode ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Phone", customer.PhoneNumber ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@email", customer.Email);
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Customer needs first name, last name, and email!");
+                }
+
+            }
+
+            Connection.Close();
         }
     }
 }

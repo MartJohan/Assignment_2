@@ -7,6 +7,15 @@ using System.Threading.Tasks;
 
 namespace dotnetcore.Models
 {
+    //For updating the Customer table
+    public enum CustomerKeys{
+        FirstName,
+        LastName,
+        Country,
+        PostalCode,
+        PhoneNumber,
+        Email
+    }
     public class Customer
     {
         /*
@@ -32,7 +41,6 @@ namespace dotnetcore.Models
         public string PhoneNumber { get; set; }
 
         public string Email { get; set; }
-
 
     }
 }
