@@ -24,7 +24,7 @@ namespace dotnetcore.DAL
 
         public Customer GetCustomer(int id);
 
-        public Customer GetCustomer(string name);
+        public Customer GetCustomer(string firstname, string lastname);
 
         public IEnumerable<Customer> ReadCustomersInRange(int offset, int limit);
 

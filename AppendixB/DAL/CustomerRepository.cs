@@ -37,11 +37,12 @@ namespace dotnetcore.DAL
         public Customer GetCustomer(int id)
         {
             Connection.Open();
-            string sql = $"Select CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email from Customer where CustomerId = {id}";
+            string sql = "Select CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email from Customer where CustomerId like @id";
             Customer customer = new Customer();
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
+                command.Parameters.AddWithValue("@id", id);
                 using(SqlDataReader reader = command.ExecuteReader())
                 {
                     reader.Read();
@@ -62,9 +63,34 @@ namespace dotnetcore.DAL
             return customer;
         }
 
-        public Customer GetCustomer(string name)
+        public Customer GetCustomer(string firstname, string lastname)
         {
-            throw new NotImplementedException();
+            Connection.Open();
+            string sql = "Select CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email from Customer where FirstName like @firstname and LastName like @lastname ";
+            Customer customer = new Customer();
+
+            using (SqlCommand command = new SqlCommand(sql, Connection))
+            {
+                command.Parameters.AddWithValue("@firstname", "%" + firstname + "%");
+                command.Parameters.AddWithValue("@lastname", "%" + lastname + "%");
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    reader.Read();
+                    Customer tempCustomer = new()
+                    {
+                        ID = reader.GetInt32(0),
+                        Firstname = reader.GetString(1),
+                        Lastname = reader.GetString(2),
+                        Country = reader.GetString(3),
+                        PostalCode = reader.GetString(4),
+                        PhoneNumber = reader.GetString(5),
+                        Email = reader.GetString(6),
+                    };
+                    customer = tempCustomer;
+                }
+            }
+            Connection.Close();
+            return customer;
         }
 
         public CustomerGenre GetMostPopularGenreForCustomer(Customer customer)
