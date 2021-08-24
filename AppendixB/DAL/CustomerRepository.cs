@@ -21,7 +21,6 @@ namespace dotnetcore.DAL
             Builder.IntegratedSecurity = true;
 
             Connection = new SqlConnection(Builder.ConnectionString);
-            Connection.Open();
         }
 
 
@@ -37,6 +36,7 @@ namespace dotnetcore.DAL
 
         public Customer GetCustomer(int id)
         {
+            Connection.Open();
             string sql = $"Select * from Customer where CustomerId = {id}";
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
