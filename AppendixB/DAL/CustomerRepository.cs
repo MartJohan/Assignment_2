@@ -29,6 +29,10 @@ namespace dotnetcore.DAL
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Returns a list of customers per country in descending order</returns>
         public IEnumerable<CustomerCountry> CountCustomersPerCountry()
         {
             Connection.Open();
@@ -53,6 +57,11 @@ namespace dotnetcore.DAL
             return CountryOccuranceList;
         }
 
+        /// <summary>
+        /// Takes in an id and finds the appropriate customer
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>An object of type Customer</returns>
         public Customer GetCustomer(int id)
         {
             Connection.Open();
@@ -83,6 +92,12 @@ namespace dotnetcore.DAL
             return customer;
         }
 
+        /// <summary>
+        /// Takes in the firstname and lastname of a customer and tries to find him/her
+        /// </summary>
+        /// <param name="firstname"></param>
+        /// <param name="lastname"></param>
+        /// <returns>Returns a Customer object of specified customer</returns>
         public Customer GetCustomer(string firstname, string lastname)
         {
             Connection.Open();
