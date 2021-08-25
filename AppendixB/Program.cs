@@ -11,8 +11,7 @@ namespace dotnetcore
         static void Main(string[] args)
         {
             CustomerRepository cr = new();
-            List<CustomerSpender> CountryOccuranceList = (List<CustomerSpender>)cr.GetTopSpenders();
-            cr.GetCustomer(2);
+            List<CustomerSpender> CountryOccuranceList = (List<CustomerSpender>)cr.GetTopSpenders(10);
 
 
             foreach(var item in CountryOccuranceList)

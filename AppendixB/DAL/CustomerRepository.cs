@@ -55,27 +55,33 @@ namespace dotnetcore.DAL
         /// </summary>
         public IEnumerable<CustomerCountry> CountCustomersPerCountry()
         {
-            
-            string sql = "SELECT COUNT(CustomerId) AS Amount, Country FROM Customer GROUP BY Country ORDER BY Amount DESC";
-            List<CustomerCountry> CountryOccuranceList = new List<CustomerCountry>();
-            using (SqlCommand command = new SqlCommand(sql, Connection))
+            try
             {
-                Connection.Open();
-                using (SqlDataReader reader = command.ExecuteReader())
+                string sql = "SELECT COUNT(CustomerId) AS Amount, Country FROM Customer GROUP BY Country ORDER BY Amount DESC";
+                List<CustomerCountry> CountryOccuranceList = new List<CustomerCountry>();
+                using (SqlCommand command = new SqlCommand(sql, Connection))
                 {
-                    while(reader.Read())
+                    Connection.Open();
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        CustomerCountry customerCountry = new()
+                        while (reader.Read())
                         {
-                            CustomerCount = reader.GetInt32(0),
-                            Country = reader.GetString(1),
-                        };
-                        CountryOccuranceList.Add(customerCountry);
+                            CustomerCountry customerCountry = new()
+                            {
+                                CustomerCount = reader.GetInt32(0),
+                                Country = reader.GetString(1),
+                            };
+                            CountryOccuranceList.Add(customerCountry);
+                        }
                     }
+                    Connection.Close();
                 }
-                Connection.Close();
+                return CountryOccuranceList;
+            } catch(Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
             }
-            return CountryOccuranceList;
         }
 
         /// <summary>
@@ -85,33 +91,40 @@ namespace dotnetcore.DAL
         /// <returns>An object of type Customer</returns>
         public Customer GetCustomer(int id)
         {
-            string sql = "SELECT CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email FROM Customer WHERE CustomerId LIKE @id";
-            Customer customer = new Customer();
-
-
-            using (SqlCommand command = new SqlCommand(sql, Connection))
+            try
             {
-                Connection.Open();
-                command.Parameters.AddWithValue("@id", id);
-                using(SqlDataReader reader = command.ExecuteReader())
+                string sql = "SELECT CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email FROM Customer WHERE CustomerId LIKE @id";
+                Customer customer = new Customer();
+
+
+                using (SqlCommand command = new SqlCommand(sql, Connection))
                 {
-                    reader.Read();
-                    Customer tempCustomer = new()
+                    Connection.Open();
+                    command.Parameters.AddWithValue("@id", id);
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        //reader.IsDBNull(x) ? null : reader.GetString(x)
-                        ID = reader.GetInt32(0),
-                        Firstname = reader.GetString(1),
-                        Lastname = reader.GetString(2),
-                        Country = reader.IsDBNull(3) ? null : reader.GetString(3),
-                        PostalCode = reader.IsDBNull(3) ? null : reader.GetString(4),
-                        PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(5),
-                        Email = reader.GetString(6),
-                    };
-                    customer = tempCustomer;
+                        reader.Read();
+                        Customer tempCustomer = new()
+                        {
+                            //reader.IsDBNull(x) ? null : reader.GetString(x)
+                            ID = reader.GetInt32(0),
+                            Firstname = reader.GetString(1),
+                            Lastname = reader.GetString(2),
+                            Country = reader.IsDBNull(3) ? null : reader.GetString(3),
+                            PostalCode = reader.IsDBNull(3) ? null : reader.GetString(4),
+                            PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(5),
+                            Email = reader.GetString(6),
+                        };
+                        customer = tempCustomer;
+                    }
+                    Connection.Close();
                 }
-                Connection.Close();
+                return customer;
+            } catch(Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
             }
-            return customer;
         }
 
         /// <summary>
@@ -122,75 +135,121 @@ namespace dotnetcore.DAL
         /// <returns>Returns a Customer object of specified customer</returns>
         public Customer GetCustomer(string firstname, string lastname)
         {
-            string sql = "SELECT CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email FROM Customer WHERE FirstName LIKE @firstname AND LastName LIKE @lastname ";
-            Customer customer = new Customer();
-
-            using (SqlCommand command = new SqlCommand(sql, Connection))
+            try
             {
-                Connection.Open();
-                command.Parameters.AddWithValue("@firstname", "%" + firstname + "%");
-                command.Parameters.AddWithValue("@lastname", "%" + lastname + "%");
-                using (SqlDataReader reader = command.ExecuteReader())
+                string sql = "SELECT CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email FROM Customer WHERE FirstName LIKE @firstname AND LastName LIKE @lastname ";
+                Customer customer = new Customer();
+
+                using (SqlCommand command = new SqlCommand(sql, Connection))
                 {
-                    reader.Read();
-                    Customer tempCustomer = new()
+                    Connection.Open();
+                    command.Parameters.AddWithValue("@firstname", "%" + firstname + "%");
+                    command.Parameters.AddWithValue("@lastname", "%" + lastname + "%");
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        ID = reader.GetInt32(0),
-                        Firstname = reader.GetString(1),
-                        Lastname = reader.GetString(2),
-                        Country = reader.IsDBNull(3) ? null : reader.GetString(3),
-                        PostalCode = reader.IsDBNull(3) ? null : reader.GetString(4),
-                        PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(5),
-                        Email = reader.GetString(6),
-                    };
-                    customer = tempCustomer;
+                        reader.Read();
+                        Customer tempCustomer = new()
+                        {
+                            ID = reader.GetInt32(0),
+                            Firstname = reader.GetString(1),
+                            Lastname = reader.GetString(2),
+                            Country = reader.IsDBNull(3) ? null : reader.GetString(3),
+                            PostalCode = reader.IsDBNull(3) ? null : reader.GetString(4),
+                            PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(5),
+                            Email = reader.GetString(6),
+                        };
+                        customer = tempCustomer;
+                    }
+                    Connection.Close();
                 }
-                Connection.Close();
+                return customer;
+            } catch(Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
             }
-            return customer;
         }
 
         public CustomerGenre GetMostPopularGenreForCustomer(Customer customer)
         {
+            //For a given customer find their most popular genre, which means the genre that with the most tracks in the Invoice table
             throw new NotImplementedException();
         }
 
         public IEnumerable<CustomerSpender> GetTopSpenders()
         {
-            //Add the total amount of money spent together and return the customers in descending order
-            string sql = "SELECT Customer.FirstName, Customer.LastName, SUM(Invoice.Total) as Money_Spent" +
+            try
+            {
+                string sql = "SELECT Customer.FirstName, Customer.LastName, SUM(Invoice.Total) as Money_Spent" +
                 " from Invoice " +
                 "INNER JOIN Customer ON Invoice.CustomerId = Customer.CustomerId" +
                 "  GROUP BY Customer.FirstName, Customer.LastName Order BY Money_Spent desc";
 
-            List <CustomerSpender> list = new List<CustomerSpender>();
+                List<CustomerSpender> list = new List<CustomerSpender>();
 
-            using(SqlCommand command = new SqlCommand(sql, Connection))
-            {
-                Connection.Open();
-
-                using(SqlDataReader reader = command.ExecuteReader())
+                using (SqlCommand command = new SqlCommand(sql, Connection))
                 {
-                    while (reader.Read())
-                    {
-                        CustomerSpender customer = new()
-                        {
-                            CustomerFirstname = reader.GetString(0),
-                            CustomerLastname = reader.GetString(1),
-                            TotalAmount = reader.GetDecimal(2),
-                        };
-                        list.Add(customer);
-                    }
-                }
-                Connection.Close();
-            }
+                    Connection.Open();
 
-            return list;
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            CustomerSpender customer = new()
+                            {
+                                CustomerFirstname = reader.GetString(0),
+                                CustomerLastname = reader.GetString(1),
+                                TotalAmount = reader.GetDecimal(2),
+                            };
+                            list.Add(customer);
+                        }
+                    }
+                    Connection.Close();
+                }
+                return list;
+            } catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
         public IEnumerable<CustomerSpender> GetTopSpenders(int limit)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string sql = "SELECT TOP (@limit) Customer.FirstName, Customer.LastName, SUM(Invoice.Total)" +
+                " as Money_Spent from Invoice INNER JOIN Customer ON" +
+                " Invoice.CustomerId = Customer.CustomerId GROUP BY Customer.FirstName, Customer.LastName" +
+                " Order BY Money_Spent desc";
+
+                List<CustomerSpender> list = new List<CustomerSpender>();
+                using (SqlCommand command = new SqlCommand(sql, Connection))
+                {
+                    Connection.Open();
+                    command.Parameters.AddWithValue("@limit", limit);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            CustomerSpender customer = new()
+                            {
+                                CustomerFirstname = reader.GetString(0),
+                                CustomerLastname = reader.GetString(1),
+                                TotalAmount = reader.GetDecimal(2),
+                            };
+                            list.Add(customer);
+                        }
+                    }
+                    Connection.Close();
+                }
+                return list;
+            } catch(Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
         public IEnumerable<Customer> ReadAllCustomers()
