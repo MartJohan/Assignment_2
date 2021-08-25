@@ -8,9 +8,16 @@ namespace dotnetcore
 {
     class Program
     {
-
         static void Main(string[] args)
         {
+            CustomerRepository cr = new();
+            List<CustomerCountry> CountryOccuranceList = (List<CustomerCountry>)cr.CountCustomersPerCountry();
+
+
+            foreach(var item in CountryOccuranceList)
+            {
+                Console.WriteLine(item);
+            }
         }
     }
 }

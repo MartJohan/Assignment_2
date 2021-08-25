@@ -26,12 +26,12 @@ namespace dotnetcore.DAL
 
         public void AddCustomer(Customer customer)
         {
-            Connection.Open();
             string sql = "Insert into Customer (FirstName, LastName, Country, PostalCode, Phone, Email)" +
                 "Values (@FirstName, @LastName, @Country, @PostalCode, @Phone, @Email)";
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
+                Connection.Open();
                 try
                 {
                     command.Parameters.AddWithValue("@FirstName", customer.Firstname);
@@ -48,21 +48,19 @@ namespace dotnetcore.DAL
                 }
 
             }
-            
-            Connection.Close();
         }
 
         /// <summary>
-        /// 
+        /// Returns a list of type CustomerCountry containing the amount of people in each country
         /// </summary>
-        /// <returns>Returns a list of customers per country in descending order</returns>
         public IEnumerable<CustomerCountry> CountCustomersPerCountry()
         {
-            Connection.Open();
+            
             string sql = "SELECT COUNT(CustomerId) AS Amount, Country FROM Customer GROUP BY Country ORDER BY Amount DESC";
             List<CustomerCountry> CountryOccuranceList = new List<CustomerCountry>();
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
+                Connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     while(reader.Read())
@@ -76,7 +74,6 @@ namespace dotnetcore.DAL
                     }
                 }
             }
-            Connection.Close();
             return CountryOccuranceList;
         }
 
@@ -87,14 +84,13 @@ namespace dotnetcore.DAL
         /// <returns>An object of type Customer</returns>
         public Customer GetCustomer(int id)
         {
-            Connection.Open();
-
             string sql = "SELECT CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email FROM Customer WHERE CustomerId LIKE @id";
             Customer customer = new Customer();
 
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
+                Connection.Open();
                 command.Parameters.AddWithValue("@id", id);
                 using(SqlDataReader reader = command.ExecuteReader())
                 {
@@ -113,7 +109,6 @@ namespace dotnetcore.DAL
                     customer = tempCustomer;
                 }
             }
-            Connection.Close();
             return customer;
         }
 
@@ -125,12 +120,12 @@ namespace dotnetcore.DAL
         /// <returns>Returns a Customer object of specified customer</returns>
         public Customer GetCustomer(string firstname, string lastname)
         {
-            Connection.Open();
             string sql = "SELECT CustomerId, Firstname, Lastname, Country, PostalCode, Phone, Email FROM Customer WHERE FirstName LIKE @firstname AND LastName LIKE @lastname ";
             Customer customer = new Customer();
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
+                Connection.Open();
                 command.Parameters.AddWithValue("@firstname", "%" + firstname + "%");
                 command.Parameters.AddWithValue("@lastname", "%" + lastname + "%");
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -149,7 +144,6 @@ namespace dotnetcore.DAL
                     customer = tempCustomer;
                 }
             }
-            Connection.Close();
             return customer;
         }
 
@@ -160,6 +154,7 @@ namespace dotnetcore.DAL
 
         public CustomerSpender GetTopSpenders()
         {
+            //Add the total amount of money spent together and return the customers in descending order
             throw new NotImplementedException();
         }
 
@@ -172,11 +167,12 @@ namespace dotnetcore.DAL
         {
             List<Customer> customerList = new List<Customer>();
             Customer customer;
-            Connection.Open();
+            
             string sql = "Select * from Customer";
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
+                Connection.Open();
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     Console.WriteLine($"{reader.GetName(0)}  {reader.GetName(1)}");
@@ -199,7 +195,6 @@ namespace dotnetcore.DAL
                     }
                 }
             }
-            Connection.Close();
             return customerList;
         }
 
@@ -207,12 +202,13 @@ namespace dotnetcore.DAL
         {
             List<Customer> customerList = new List<Customer>();
             Customer customer;
-            Connection.Open();
+            
             string sql = "Select * from Customer ORDER BY CustomerId ASC OFFSET @offset ROWS FETCH NEXT @limit ROWS ONLY";
             Console.WriteLine(sql);
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
+                Connection.Open();
                 command.Parameters.AddWithValue("@offset", offset);
                 command.Parameters.AddWithValue("@limit", limit);
                 using (SqlDataReader reader = command.ExecuteReader())
@@ -238,7 +234,6 @@ namespace dotnetcore.DAL
                     }
                 }
             }
-            Connection.Close();
             return customerList;
         }
 
@@ -248,12 +243,13 @@ namespace dotnetcore.DAL
             {
                 throw new ArgumentException("Keys and string need to be the same size");
             }
-            Connection.Open();
+            
             //TODO Finish method
             string sql = "UPDATE Customers SET ";
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
+                Connection.Open();
                 try
                 {
                     command.Parameters.AddWithValue("@FirstName", customer.Firstname);
@@ -270,8 +266,6 @@ namespace dotnetcore.DAL
                 }
 
             }
-
-            Connection.Close();
         }
     }
 }
