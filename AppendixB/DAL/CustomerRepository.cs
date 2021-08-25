@@ -24,6 +24,10 @@ namespace dotnetcore.DAL
         }
 
 
+        /// <summary>
+        /// Takes in a customer object and enters it into the database
+        /// </summary>
+        /// <param name="customer"></param>
         public void AddCustomer(Customer customer)
         {
             string sql = "Insert into Customer (FirstName, LastName, Country, PostalCode, Phone, Email)" +
