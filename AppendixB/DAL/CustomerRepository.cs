@@ -107,7 +107,7 @@ namespace dotnetcore.DAL
                         PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(5),
                         Email = reader.GetString(6),
                     };
-                    customer = tempCustomer;
+                    customer = tempCustomer; 
                 }
                 Connection.Close();
             }
@@ -275,13 +275,22 @@ namespace dotnetcore.DAL
             {
                 throw new ArgumentException("Keys and string need to be the same size");
             }
-            
-            //TODO Finish method
-            string sql = "UPDATE Customers SET ";
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < keys.Length; i++)
+            {
+                string updateSubString = keys[i] + "= '" + values[i] + "',";
+                stringBuilder.Append(updateSubString);
+            }
+            //Remove trailing comma
+            stringBuilder.Length--;
+
+            string sql = "UPDATE Customer SET " + stringBuilder.ToString() + "WHERE CustomerID = " + customer.ID;
+            Console.WriteLine(sql);
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
                 Connection.Open();
+<<<<<<< HEAD
                 try
                 {
                     command.Parameters.AddWithValue("@FirstName", customer.Firstname);
@@ -298,7 +307,13 @@ namespace dotnetcore.DAL
                 }
                 Connection.Close();
 
+=======
+                command.ExecuteNonQuery();
+                Connection.Close();
+>>>>>>> development_tien
             }
+
+
         }
     }
 }

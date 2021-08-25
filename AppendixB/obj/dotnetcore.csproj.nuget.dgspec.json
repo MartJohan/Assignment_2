@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\martij\\source\\repos\\assignment_2\\AppendixB\\dotnetcore.csproj": {}
+    "C:\\Users\\tinguy\\source\\repos\\Accelerate_assignment2\\AppendixB\\dotnetcore.csproj": {}
   },
   "projects": {
-    "C:\\Users\\martij\\source\\repos\\assignment_2\\AppendixB\\dotnetcore.csproj": {
+    "C:\\Users\\tinguy\\source\\repos\\Accelerate_assignment2\\AppendixB\\dotnetcore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\martij\\source\\repos\\assignment_2\\AppendixB\\dotnetcore.csproj",
+        "projectUniqueName": "C:\\Users\\tinguy\\source\\repos\\Accelerate_assignment2\\AppendixB\\dotnetcore.csproj",
         "projectName": "dotnetcore",
-        "projectPath": "C:\\Users\\martij\\source\\repos\\assignment_2\\AppendixB\\dotnetcore.csproj",
-        "packagesPath": "C:\\Users\\martij\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\martij\\source\\repos\\assignment_2\\AppendixB\\obj\\",
+        "projectPath": "C:\\Users\\tinguy\\source\\repos\\Accelerate_assignment2\\AppendixB\\dotnetcore.csproj",
+        "packagesPath": "C:\\Users\\tinguy\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\tinguy\\source\\repos\\Accelerate_assignment2\\AppendixB\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\martij\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\tinguy\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -64,7 +64,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.303\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }
