@@ -46,7 +46,7 @@ namespace dotnetcore.DAL
                 {
                     Console.WriteLine("Customer needs first name, last name, and email!");
                 }
-
+                Connection.Close();
             }
         }
 
@@ -73,6 +73,7 @@ namespace dotnetcore.DAL
                         CountryOccuranceList.Add(customerCountry);
                     }
                 }
+                Connection.Close();
             }
             return CountryOccuranceList;
         }
@@ -108,6 +109,7 @@ namespace dotnetcore.DAL
                     };
                     customer = tempCustomer;
                 }
+                Connection.Close();
             }
             return customer;
         }
@@ -143,6 +145,7 @@ namespace dotnetcore.DAL
                     };
                     customer = tempCustomer;
                 }
+                Connection.Close();
             }
             return customer;
         }
@@ -152,13 +155,40 @@ namespace dotnetcore.DAL
             throw new NotImplementedException();
         }
 
-        public CustomerSpender GetTopSpenders()
+        public IEnumerable<CustomerSpender> GetTopSpenders()
         {
             //Add the total amount of money spent together and return the customers in descending order
-            throw new NotImplementedException();
+            string sql = "SELECT Customer.FirstName, Customer.LastName, SUM(Invoice.Total) as Money_Spent" +
+                " from Invoice " +
+                "INNER JOIN Customer ON Invoice.CustomerId = Customer.CustomerId" +
+                "  GROUP BY Customer.FirstName, Customer.LastName Order BY Money_Spent desc";
+
+            List <CustomerSpender> list = new List<CustomerSpender>();
+
+            using(SqlCommand command = new SqlCommand(sql, Connection))
+            {
+                Connection.Open();
+
+                using(SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        CustomerSpender customer = new()
+                        {
+                            CustomerFirstname = reader.GetString(0),
+                            CustomerLastname = reader.GetString(1),
+                            TotalAmount = reader.GetDecimal(2),
+                        };
+                        list.Add(customer);
+                    }
+                }
+                Connection.Close();
+            }
+
+            return list;
         }
 
-        public CustomerSpender GetTopSpenders(int limit)
+        public IEnumerable<CustomerSpender> GetTopSpenders(int limit)
         {
             throw new NotImplementedException();
         }
@@ -194,6 +224,7 @@ namespace dotnetcore.DAL
                         
                     }
                 }
+                Connection.Close();
             }
             return customerList;
         }
@@ -233,6 +264,7 @@ namespace dotnetcore.DAL
 
                     }
                 }
+                Connection.Close();
             }
             return customerList;
         }
@@ -264,6 +296,7 @@ namespace dotnetcore.DAL
                 {
                     Console.WriteLine("Customer needs first name, last name, and email!");
                 }
+                Connection.Close();
 
             }
         }

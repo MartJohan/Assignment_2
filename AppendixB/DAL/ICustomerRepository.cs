@@ -34,9 +34,9 @@ namespace dotnetcore.DAL
 
         public IEnumerable<CustomerCountry> CountCustomersPerCountry();
 
-        public CustomerSpender GetTopSpenders();
+        public IEnumerable<CustomerSpender> GetTopSpenders();
 
-        public CustomerSpender GetTopSpenders(int limit);
+        public IEnumerable<CustomerSpender> GetTopSpenders(int limit);
 
         public CustomerGenre GetMostPopularGenreForCustomer(Customer customer);
     }

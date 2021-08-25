@@ -10,7 +10,7 @@ namespace dotnetcore.Models
     {
         public string CustomerFirstname { get; set; }
         public string CustomerLastname { get; set; }
-        public double TotalAmount { get; set; }
+        public decimal TotalAmount { get; set; }
 
     }
 }
