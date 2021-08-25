@@ -106,8 +106,9 @@ namespace dotnetcore.DAL
                         PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(5),
                         Email = reader.GetString(6),
                     };
-                    customer = tempCustomer;
+                    customer = tempCustomer; 
                 }
+                Connection.Close();
             }
             return customer;
         }
@@ -243,29 +244,26 @@ namespace dotnetcore.DAL
             {
                 throw new ArgumentException("Keys and string need to be the same size");
             }
-            
-            //TODO Finish method
-            string sql = "UPDATE Customers SET ";
+            StringBuilder stringBuilder = new StringBuilder();
+            for (int i = 0; i < keys.Length; i++)
+            {
+                string updateSubString = keys[i] + "= '" + values[i] + "',";
+                stringBuilder.Append(updateSubString);
+            }
+            //Remove trailing comma
+            stringBuilder.Length--;
+
+            string sql = "UPDATE Customer SET " + stringBuilder.ToString() + "WHERE CustomerID = " + customer.ID;
+            Console.WriteLine(sql);
 
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
                 Connection.Open();
-                try
-                {
-                    command.Parameters.AddWithValue("@FirstName", customer.Firstname);
-                    command.Parameters.AddWithValue("@LastName", customer.Lastname);
-                    command.Parameters.AddWithValue("@Country", customer.Country ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@PostalCode", customer.PostalCode ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@Phone", customer.PhoneNumber ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@email", customer.Email);
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Customer needs first name, last name, and email!");
-                }
-
+                command.ExecuteNonQuery();
+                Connection.Close();
             }
+
+
         }
     }
 }

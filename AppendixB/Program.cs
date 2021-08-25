@@ -11,13 +11,13 @@ namespace dotnetcore
         static void Main(string[] args)
         {
             CustomerRepository cr = new();
-            List<CustomerCountry> CountryOccuranceList = (List<CustomerCountry>)cr.CountCustomersPerCountry();
-
-
-            foreach(var item in CountryOccuranceList)
-            {
-                Console.WriteLine(item);
-            }
+            Customer cus = cr.GetCustomer(3);
+            Console.WriteLine("cus " + cus.Firstname);
+            CustomerKeys[] a = { CustomerKeys.FirstName, CustomerKeys.LastName };
+            string[] b = { "aaaaa", "bbbbbb" };
+            cr.UpdateCustomer(cus, a, b);
+            cus = cr.GetCustomer(3);
+            Console.WriteLine("cus " + cus.Firstname);
         }
     }
 }
