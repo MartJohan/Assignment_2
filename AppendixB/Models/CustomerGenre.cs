@@ -8,8 +8,11 @@ namespace dotnetcore.Models
 {
     public class CustomerGenre
     {
-        public string GenreName { get; set; }
+        public Dictionary<string, int> GenreCount;
 
-        public int CustomerCount { get; set; }
+        public CustomerGenre()
+        {
+            GenreCount = new Dictionary<string, int>();
+        }
     }
 }

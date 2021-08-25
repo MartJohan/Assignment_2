@@ -11,13 +11,16 @@ namespace dotnetcore
         static void Main(string[] args)
         {
             CustomerRepository cr = new();
-            Customer cus = cr.GetCustomer(3);
-            Console.WriteLine("cus " + cus.Firstname);
-            CustomerKeys[] a = { CustomerKeys.FirstName, CustomerKeys.LastName };
-            string[] b = { "aaaaa", "bbbbbb" };
-            cr.UpdateCustomer(cus, a, b);
-            cus = cr.GetCustomer(3);
-            Console.WriteLine("cus " + cus.Firstname);
+            Customer cus = cr.GetCustomer(12);
+
+            CustomerGenre cg =  cr.GetMostPopularGenreForCustomer(cus);
+
+            foreach (string s in cg.GenreCount.Keys)
+            {
+                Console.WriteLine("KEY VALUE PAIR");
+                Console.WriteLine(s);
+                Console.WriteLine(cg.GenreCount[s]);
+            }
         }
     }
 }

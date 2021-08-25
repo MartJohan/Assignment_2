@@ -170,12 +170,57 @@ namespace dotnetcore.DAL
             }
         }
 
+        /// <summary>
+        /// Takes in a customer object and finds the most popular genres for that customer
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <returns>An object of type genre containing a dictionary</returns>
         public CustomerGenre GetMostPopularGenreForCustomer(Customer customer)
         {
             //For a given customer find their most popular genre, which means the genre that with the most tracks in the Invoice table
-            throw new NotImplementedException();
+            string sql = "SELECT G.Name, I.CustomerId, COUNT(G.Name) AS amount from Genre G INNER JOIN Track T ON G.GenreId = T.GenreId INNER JOIN InvoiceLine IL ON IL.TrackId = T.TrackId INNER JOIN Invoice I ON I.InvoiceId = IL.InvoiceId WHERE I.CustomerId = @id GROUP BY I.CustomerId, G.Name ORDER BY amount DESC";
+
+            CustomerGenre genre = new();
+
+            int countCurrent = 0;
+            string genreCurrent = "";
+
+            int countNext = 0;
+            string genreNext = "";
+
+
+            using (SqlCommand command = new SqlCommand(sql, Connection))
+            {
+                Connection.Open();
+                command.Parameters.AddWithValue("@id", customer.ID);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while(reader.Read())
+                    {
+                        countCurrent = reader.GetInt32(2);
+                        genreCurrent = reader.GetString(0);
+
+                        if ( countCurrent >= countNext)
+                        {
+                            countNext = countCurrent;
+                            genreNext = genreCurrent;
+                            genre.GenreCount.Add(genreNext, countNext);
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                Connection.Close();
+            }
+            return genre;
         }
 
+        /// <summary>
+        /// Returns a list of the top spenders and how much money they have spent
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<CustomerSpender> GetTopSpenders()
         {
             try
@@ -214,6 +259,11 @@ namespace dotnetcore.DAL
             }
         }
 
+        /// <summary>
+        /// Takes in a limit parameter that decides how many customers you want to have in your list
+        /// </summary>
+        /// <param name="limit"></param>
+        /// <returns>A limited list with the top spenders and how much money they have spent</returns>
         public IEnumerable<CustomerSpender> GetTopSpenders(int limit)
         {
             try
@@ -252,6 +302,10 @@ namespace dotnetcore.DAL
             }
         }
 
+        /// <summary>
+        /// Returns a list of all customers 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Customer> ReadAllCustomers()
         {
             List<Customer> customerList = new List<Customer>();
@@ -288,7 +342,13 @@ namespace dotnetcore.DAL
             return customerList;
         }
 
-        public IEnumerable<Customer> ReadCustomersInRange(int offset, int limit)
+        /// <summary>
+        /// Returns a list of all customers between the start and the end
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <param name="limit"></param>
+        /// <returns></returns>
+        public IEnumerable<Customer> ReadCustomersInRange(int start, int end)
         {
             List<Customer> customerList = new List<Customer>();
             Customer customer;
@@ -299,8 +359,8 @@ namespace dotnetcore.DAL
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
                 Connection.Open();
-                command.Parameters.AddWithValue("@offset", offset);
-                command.Parameters.AddWithValue("@limit", limit);
+                command.Parameters.AddWithValue("@offset", start);
+                command.Parameters.AddWithValue("@limit", end);
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
                     Console.WriteLine($"{reader.GetName(0)}  {reader.GetName(1)}");
@@ -328,6 +388,12 @@ namespace dotnetcore.DAL
             return customerList;
         }
 
+        /// <summary>
+        /// Takes in a Customer object, an array from the CusterKeys enum representing columns, and a string array representing rows 
+        /// </summary>
+        /// <param name="customer"></param>
+        /// <param name="keys"></param>
+        /// <param name="values"></param>
         public void UpdateCustomer(Customer customer, CustomerKeys[] keys, string[] values)
         {
             if(keys.Length != values.Length)
@@ -349,27 +415,8 @@ namespace dotnetcore.DAL
             using (SqlCommand command = new SqlCommand(sql, Connection))
             {
                 Connection.Open();
-<<<<<<< HEAD
-                try
-                {
-                    command.Parameters.AddWithValue("@FirstName", customer.Firstname);
-                    command.Parameters.AddWithValue("@LastName", customer.Lastname);
-                    command.Parameters.AddWithValue("@Country", customer.Country ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@PostalCode", customer.PostalCode ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@Phone", customer.PhoneNumber ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@email", customer.Email);
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Customer needs first name, last name, and email!");
-                }
-                Connection.Close();
-
-=======
                 command.ExecuteNonQuery();
                 Connection.Close();
->>>>>>> development_tien
             }
 
 
