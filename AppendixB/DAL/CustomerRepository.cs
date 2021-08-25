@@ -243,7 +243,41 @@ namespace dotnetcore.DAL
         /// <returns>A limited list with the top spenders and how much money they have spent</returns>
         public IEnumerable<CustomerSpender> GetTopSpenders(int limit)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string sql = "SELECT TOP (@limit) Customer.FirstName, Customer.LastName, SUM(Invoice.Total)" +
+                " as Money_Spent from Invoice INNER JOIN Customer ON" +
+                " Invoice.CustomerId = Customer.CustomerId GROUP BY Customer.FirstName, Customer.LastName" +
+                " Order BY Money_Spent desc";
+
+                List<CustomerSpender> list = new List<CustomerSpender>();
+                using (SqlCommand command = new SqlCommand(sql, Connection))
+                {
+                    Connection.Open();
+                    command.Parameters.AddWithValue("@limit", limit);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            CustomerSpender customer = new()
+                            {
+                                CustomerFirstname = reader.GetString(0),
+                                CustomerLastname = reader.GetString(1),
+                                TotalAmount = reader.GetDecimal(2),
+                            };
+                            list.Add(customer);
+                        }
+                    }
+                    Connection.Close();
+                }
+                return list;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
         /// <summary>
