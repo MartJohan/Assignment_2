@@ -164,7 +164,11 @@ namespace dotnetcore.DAL
         public CustomerGenre GetMostPopularGenreForCustomer(Customer customer)
         {
             //For a given customer find their most popular genre, which means the genre that with the most tracks in the Invoice table
-            string sql = "SELECT G.Name, I.CustomerId, COUNT(G.Name) AS amount from Genre G INNER JOIN Track T ON G.GenreId = T.GenreId INNER JOIN InvoiceLine IL ON IL.TrackId = T.TrackId INNER JOIN Invoice I ON I.InvoiceId = IL.InvoiceId WHERE I.CustomerId = @id GROUP BY I.CustomerId, G.Name ORDER BY amount DESC";
+            string sql = "SELECT G.Name, I.CustomerId, COUNT(G.Name) AS amount from Genre G" +
+                " INNER JOIN Track T ON G.GenreId = T.GenreId" +
+                " INNER JOIN InvoiceLine IL ON IL.TrackId = T.TrackId" +
+                " INNER JOIN Invoice I ON I.InvoiceId = IL.InvoiceId" +
+                " WHERE I.CustomerId = @id GROUP BY I.CustomerId, G.Name ORDER BY amount DESC";
 
             CustomerGenre genre = new();
 
